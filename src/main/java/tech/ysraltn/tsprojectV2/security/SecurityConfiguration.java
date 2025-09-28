@@ -31,29 +31,40 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .cors(Customizer.withDefaults()) // BURASI ÖNEMLİ
+            .cors(Customizer.withDefaults())
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Allow authenticated users to GET users (list or subpaths)
-                .requestMatchers(HttpMethod.GET, "/api/users", "/api/users/**").authenticated()
-                // Profile endpoints for authenticated users
-                .requestMatchers("/api/users/profile").authenticated()
-                // Admin-only for POST/PUT/DELETE user endpoints
+                // ✅ Public API
+                .requestMatchers("/api/auth/**").permitAll()
+
+                // 🔒 Protected API endpoints
+                .requestMatchers(HttpMethod.GET, "/api/users/**").authenticated()
                 .requestMatchers(HttpMethod.POST, "/api/users/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/users/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/users/**").hasRole("ADMIN")
-                // Assignments: GET for any authenticated user; POST/DELETE for ADMIN or MANAGER
+
                 .requestMatchers(HttpMethod.GET, "/api/assignments/**").authenticated()
                 .requestMatchers(HttpMethod.POST, "/api/assignments/**").hasAnyRole("ADMIN", "MANAGER")
                 .requestMatchers(HttpMethod.DELETE, "/api/assignments/**").hasAnyRole("ADMIN", "MANAGER")
+
+                // ✅ Swagger
                 .requestMatchers(
-                    "/api/auth/**",
                     "/swagger-ui/**",
                     "/v3/api-docs/**",
                     "/swagger-ui.html",
                     "/v3/api-docs.yaml"
-                    ).permitAll() // Login, register vb.
-                .anyRequest().authenticated()
+                ).permitAll()
+
+                // ✅ Frontend bütün route ve statikler serbest
+                .requestMatchers(
+                    "/", "/index.html",
+                    "/_next/**",
+                    "/favicon.ico",
+                    "/assets/**"
+                ).permitAll()
+
+                // Geri kalan her şey serbest (frontend yönetecek)
+                .anyRequest().permitAll()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider())
