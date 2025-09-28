@@ -98,7 +98,7 @@ public class SecurityConfiguration {
                 "http://localhost:3000",
                 "http://127.0.0.1:3000",
                 "http://192.168.1.115:3000",
-                "http://35.226.27.83:3000"
+                "http://35.226.27.83:8080"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
