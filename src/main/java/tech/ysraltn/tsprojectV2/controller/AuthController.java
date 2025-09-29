@@ -12,6 +12,12 @@ import tech.ysraltn.tsprojectV2.service.AuthService;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = {
+    "http://localhost:3000",
+    "http://127.0.0.1:3000", 
+    "http://192.168.1.115:3000",
+    "http://35.226.27.83:8080"
+}, allowCredentials = "true")
 public class AuthController {
 
     private final AuthService authService;

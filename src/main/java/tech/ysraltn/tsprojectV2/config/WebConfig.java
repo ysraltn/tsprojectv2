@@ -10,9 +10,14 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // tüm endpointler için geçerli
-                .allowedOrigins("http://localhost:3000") // React frontend
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedOrigins(
+                    "http://localhost:3000",     // React development
+                    "http://127.0.0.1:3000",     // React development alternative
+                    "http://192.168.1.115:3000", // Local network
+                    "http://35.226.27.83:8080"   // VM production
+                )
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
-                .allowCredentials(true); // Eğer JWT veya cookie kullanıyorsan true olmalı
+                .allowCredentials(true);
     }
 }
