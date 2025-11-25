@@ -8,4 +8,5 @@ import java.util.List;
 public interface InstitutionConsumableTypeRepository extends JpaRepository<InstitutionConsumableType, Long> {
     List<InstitutionConsumableType> findByInstitutionId(Long institutionId);
     List<InstitutionConsumableType> findByConsumableTypeId(Long consumableTypeId);
+    List<InstitutionConsumableType> findByInstitutionIdIn(List<Long> institutionIds);
 }

@@ -7,6 +7,7 @@ import tech.ysraltn.tsprojectV2.dto.InstitutionConsumableTypeDto;
 import tech.ysraltn.tsprojectV2.service.InstitutionConsumableTypeService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -19,6 +20,11 @@ public class InstitutionConsumableTypeController {
     @GetMapping
     public ResponseEntity<List<InstitutionConsumableTypeDto>> getAll() {
         return ResponseEntity.ok(service.getAll());
+    }
+
+    @GetMapping("/bulk")
+    public ResponseEntity<Map<Long, List<InstitutionConsumableTypeDto>>> getBulkByInstitutionIds(@RequestParam List<Long> institutionIds) {
+        return ResponseEntity.ok(service.getByInstitutionIds(institutionIds));
     }
 
     @GetMapping("/by-institution/{institutionId}")

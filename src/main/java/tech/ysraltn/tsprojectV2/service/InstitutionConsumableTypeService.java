@@ -11,7 +11,9 @@ import tech.ysraltn.tsprojectV2.repository.InstitutionConsumableTypeRepository;
 import tech.ysraltn.tsprojectV2.repository.InstitutionRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +57,16 @@ public class InstitutionConsumableTypeService {
                 .stream()
                 .map(this::convertToDto)
                 .toList();
+    }
+
+    public Map<Long, List<InstitutionConsumableTypeDto>> getByInstitutionIds(List<Long> institutionIds) {
+        // Get all institution consumable types for the given institution IDs in one optimized query
+        List<InstitutionConsumableType> allTypes = institutionConsumableTypeRepository.findByInstitutionIdIn(institutionIds);
+
+        // Group by institution ID
+        return allTypes.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.groupingBy(InstitutionConsumableTypeDto::getInstitutionId));
     }
 
     private InstitutionConsumableTypeDto convertToDto(InstitutionConsumableType entity) {
