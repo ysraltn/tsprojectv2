@@ -50,9 +50,16 @@ public class CycleService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı"));
 
-        // 3. Atama kontrolü
-        boolean isAssigned = assignmentRepository.findByUserIdAndProductId(user.getId(), product.getId()).isPresent();
+        boolean isAssigned = false;
+        // admin ise atama kontrolü yapma
+        if (user.getRoles().stream().noneMatch(role -> role.getName().equals("ROLE_ADMIN"))) {
+            isAssigned = true;
+        } else {
+            // 3. Atama kontrolü
+            isAssigned = assignmentRepository.findByUserIdAndProductId(user.getId(), product.getId()).isPresent();
+        }
 
+        
         if (!isAssigned) {
             throw new RuntimeException("Bu kullanıcıya bu ürün atanmadığı için döngü verisi girilemez.");
         }
