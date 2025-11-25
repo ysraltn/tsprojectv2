@@ -52,7 +52,8 @@ public class CycleService {
 
         boolean isAssigned = false;
         // admin ise atama kontrolü yapma
-        if (user.getRoles().stream().noneMatch(role -> role.getName().equals("ROLE_ADMIN"))) {
+        if (user.getRoles().stream()
+            .anyMatch(role -> role.getName().equals("ROLE_ADMIN"))) {
             isAssigned = true;
         } else {
             // 3. Atama kontrolü
